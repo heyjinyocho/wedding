@@ -69,8 +69,12 @@
     background-color:var(--paper);
     box-shadow:0 0 24px rgba(45,45,30,.06);
   }
-  section{padding:64px 28px;text-align:center;border-top:1px solid var(--line)}
-  section:first-child{border-top:0}
+  section{position:relative;padding:72px 28px 64px;text-align:center}
+  /* 구분선 대신: 번갈아 아주 옅은 바탕(위아래는 부드럽게 번짐) + 위쪽 작은 장식 → 이어지지만 스크롤하면 섹션마다 따로 보이게 */
+  section:not(.cover):nth-of-type(odd){background:linear-gradient(to bottom,rgba(238,234,222,0),#EEEADE 56px,#EEEADE calc(100% - 56px),rgba(238,234,222,0))}
+  section:not(.cover)::before{content:'';position:absolute;left:50%;top:26px;transform:translateX(-50%);width:64px;height:10px;
+    background:radial-gradient(circle,var(--accent) 2.6px,transparent 3px) center/10px 10px no-repeat,
+      linear-gradient(var(--accent),var(--accent)) left center/22px 1px no-repeat,linear-gradient(var(--accent),var(--accent)) right center/22px 1px no-repeat;opacity:.7}
   .eng{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;letter-spacing:.1em;color:var(--accent-text);font-size:20px;display:block;margin-bottom:6px}
   h2{font-size:22px;font-weight:700;letter-spacing:.04em;margin-bottom:28px;color:var(--accent-text)}
   p{font-size:var(--fs)}
@@ -255,7 +259,7 @@
 
   /* 안내사항 */
   .notice{text-align:left;background:var(--box-bg);border:1px solid var(--box-line);border-radius:10px;overflow:hidden;box-shadow:var(--box-shadow)}
-  .notice h3{font-size:18px;background:var(--box-head);border-left:4px solid var(--accent);color:var(--accent-text);padding:14px 18px}
+  .notice h3{font-size:18px;background:var(--box-head);color:var(--accent-text);padding:14px 18px}
   .notice p{padding:14px 18px 18px}
   .notice + .notice{margin-top:14px}
 
@@ -284,7 +288,7 @@
   .weather .w-head{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--box-head);color:var(--accent-text);font-weight:700;padding:10px 16px}
   .weather .w-head span{font-weight:400;font-size:14px;color:var(--muted)}
   .weather .w-body{display:flex;align-items:center;gap:16px;padding:16px}
-  .weather .w-icon{font-size:42px;line-height:1}
+  .weather .w-icon{font-size:46px;line-height:1;flex:0 0 auto}
   .weather .w-main b{display:block;font-size:20px;color:var(--ink)}
   .weather .w-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:0 16px 14px;text-align:center}
   .weather .w-grid div{background:#fff;border:1px solid var(--box-line);border-radius:8px;padding:8px 4px;line-height:1.4}
@@ -300,28 +304,68 @@
   .park + .park{border-top:1px dashed var(--line)}
   .park b{display:block}
   .park .btn{min-height:44px;padding:0 12px;flex-shrink:0}
-  .tr + .tr{margin-top:16px}
-  .tr h4{font-size:var(--fs);font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:2px}
+  /* 교통편: 노선색 배지 */
+  .tr + .tr{margin-top:22px}
+  .tr h4{font-size:var(--fs);font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:10px}
   .tr h4::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .tr-card{background:var(--box-bg);border:1px solid var(--box-line);border-radius:10px;padding:14px 16px}
+  .tr-card + .tr-card{margin-top:10px}
+  .tr-main{display:flex;align-items:flex-start;gap:10px}
+  .tr-main b{display:block;line-height:1.45}
+  .tr-main small{display:block;color:var(--muted);font-size:15px;margin-top:2px}
+  /* 배지: 명조·세리프 글꼴은 글자가 위로 떠 보여서 시스템 고딕으로 + 높이 고정·line-height 1로 정중앙 */
+  .ln,.bus-type,.bus-num{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;font-weight:700;
+    font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif;letter-spacing:-.01em}
+  .ln{height:22px;min-width:22px;padding:0 8px;border-radius:11px;color:#fff;font-size:12px}
+  .ln.round{width:22px;padding:0}
+  .ln-sl{background:#6789CA} .ln-1{background:#0052A4} .ln-2{background:#00A84D} .ln-7{background:#747F00}
+  .tr-xfer{list-style:none;margin-top:12px;padding-top:12px;border-top:1px dashed var(--box-line)}
+  .tr-xfer li{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .tr-xfer li + li{margin-top:8px}
+  .tr-xfer .arw{color:var(--muted)}
+  .tr-xfer em{font-style:normal;color:var(--muted);font-size:15px;margin-left:auto}
+  .tr-main .ln{margin-top:3px}
+  .tr-stop{font-weight:700;margin-bottom:10px;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+  .tr-stop small{font-weight:400;color:var(--muted);font-size:15px}
+  .bus-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .bus-row + .bus-row{margin-top:8px}
+  .bus-type{width:36px;height:24px;font-size:12px;color:#fff;border-radius:4px}
+  .bus-num{height:24px;padding:0 9px;font-size:14px;border-radius:5px;border:1.5px solid;background:#fff}
+  .bt-g{background:#0068B7} .bn-g{color:#0068B7;border-color:#0068B7}     /* 간선 파랑 */
+  .bt-j{background:#3EA53B} .bn-j{color:#2F8A2D;border-color:#3EA53B}     /* 지선 초록 */
+  .bt-m{background:#7AA33A} .bn-m{color:#5E8228;border-color:#7AA33A}     /* 마을 연두 */
 
   /* 계좌 */
   /* 계좌 펼침 상자: 세이지 테마 */
   .acc{border:1px solid #D3DBC8;border-radius:10px;text-align:left;margin-top:14px;background:#fff;overflow:hidden;
     box-shadow:0 1px 2px rgba(45,45,30,.05),0 4px 12px rgba(45,45,30,.06)}
   .acc summary{list-style:none;cursor:pointer;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;min-height:58px;
-    background:#EDF1E7;color:var(--accent-text);font-weight:700;border-left:4px solid var(--accent)}
+    background:#EDF1E7;color:var(--accent-text);font-weight:700}
   .acc summary::-webkit-details-marker{display:none}
-  .acc summary::after{content:'＋';display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;
-    background:var(--accent-strong);color:#fff;font-size:16px;font-weight:700}
-  .acc[open] summary{background:var(--accent-strong);color:#fff;border-left-color:var(--olive-d)}
-  .acc[open] summary::after{content:'－';background:#fff;color:var(--accent-strong)}
-  .acc .body{padding:4px 18px 12px;background:#FBFCF8}
-  .acc .line{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 0}
-  .acc .line + .line{border-top:1px dashed #D3DBC8}
-  .acc .line .btn{min-height:40px;padding:0 14px;flex-shrink:0;background:var(--accent-strong);border-color:var(--accent-strong);color:#fff}
+  /* ▼(닫힘) / ▲(열림): 삼각형을 그림으로 그려 원 정중앙에 */
+  .acc summary::after{content:'';flex:0 0 28px;width:28px;height:28px;border-radius:50%;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1.5 3h7L5 7.6z' fill='%23fff'/%3E%3C/svg%3E") center/12px no-repeat,var(--accent-strong)}
+  .acc[open] summary{background:var(--accent-strong);color:#fff}
+  .acc[open] summary::after{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1.5 7h7L5 2.4z' fill='%2363744F'/%3E%3C/svg%3E") center/12px no-repeat,#fff}
+  .acc .body{padding:4px 16px 8px;background:#FBFCF8}
+  /* 인물 카드: 이름 + 전화/문자 / 계좌 + 복사 */
+  .pc-row{padding:16px 0}
+  .pc-row + .pc-row{border-top:1px dashed #D3DBC8}
+  .pc-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .pc-who small{color:var(--muted);font-size:15px;margin-right:6px}
+  .pc-who b{font-weight:700;color:var(--ink)}
+  .pc-icons{display:flex;gap:8px;flex-shrink:0}
+  .ic-btn{width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+    border:1.5px solid var(--accent-strong);color:var(--accent-strong);background:#fff;cursor:pointer;padding:0;text-decoration:none}
+  .ic-btn svg{width:18px;height:18px;display:block}
+  .ic-btn:active{background:var(--accent-strong);color:#fff}
+  .pc-acct{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;padding:10px 12px;background:#fff;border:1px solid var(--box-line);border-radius:8px}
+  .pc-acct .num{line-height:1.45;word-break:keep-all}
+  .pc-acct .num span{display:block;color:var(--muted);font-size:15px}
+  .pc-acct .btn{min-height:38px;padding:0 14px;flex-shrink:0;background:var(--accent-strong);border-color:var(--accent-strong);color:#fff}
 
   /* RSVP */
-  .rsvp{display:flex;flex-direction:column;gap:20px;text-align:left;background:var(--box-bg);border:1px solid var(--box-line);border-left:4px solid var(--accent);
+  .rsvp{display:flex;flex-direction:column;gap:20px;text-align:left;background:var(--box-bg);border:1px solid var(--box-line);
     border-radius:10px;padding:24px 20px;box-shadow:var(--box-shadow)}
   .rsvp-row{display:flex;flex-direction:column;gap:8px}
   .rsvp-label{font-weight:700;color:var(--ink)}
@@ -336,9 +380,16 @@
   .stepper{display:flex;align-items:center;gap:14px}
   .stepper button{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--accent-text);background:#fff;color:var(--accent-text);font-size:22px;cursor:pointer;line-height:1}
   .stepper output{min-width:28px;text-align:center;font-size:20px;font-weight:700;color:var(--ink)}
-  .rsvp-help{color:var(--muted);margin-top:-2px}
+  .count-row{display:flex;align-items:center;justify-content:space-between;gap:6px;background:#fff;border:1px solid var(--box-line);border-radius:8px;padding:8px 8px 8px 12px}
+  .count-row + .count-row{margin-top:8px}
+  .count-row .cr-label{white-space:nowrap}
+  @media (max-width:340px){.count-row .cr-label{white-space:normal}}
+  .count-row .stepper{gap:10px}
+  .count-row .stepper button{width:38px;height:38px;font-size:19px;flex-shrink:0}
+  .count-row .stepper{gap:8px}
+  .count-row .stepper output{min-width:22px}
   .rsvp-submit{width:100%;margin-top:4px}
-  .rsvp-done{background:var(--box-bg);border:1px solid var(--box-line);border-left:4px solid var(--accent);border-radius:10px;padding:28px 20px;box-shadow:var(--box-shadow)}
+  .rsvp-done{background:var(--box-bg);border:1px solid var(--box-line);border-radius:10px;padding:28px 20px;box-shadow:var(--box-shadow)}
   .rsvp-done .btn{margin-top:16px}
 
   /* 방명록 */
@@ -353,7 +404,7 @@
   .gb-card{ /* 방명록 카드: 계좌 상자와 같은 테마 */
     background:var(--box-bg);border:1px solid var(--box-line);border-radius:10px;overflow:hidden;box-shadow:var(--box-shadow);
   }
-  .gb-card .who{display:flex;justify-content:space-between;align-items:baseline;gap:10px;background:var(--box-head);border-left:4px solid var(--accent);padding:10px 16px}
+  .gb-card .who{display:flex;justify-content:space-between;align-items:baseline;gap:10px;background:var(--box-head);padding:10px 16px}
   .gb-card .who b{color:var(--accent-text);font-size:17px}
   .gb-card .who span{color:var(--muted);font-size:var(--fs);flex-shrink:0}
   .gb-card p{white-space:pre-wrap;word-break:break-word;padding:12px 16px 16px}
@@ -363,12 +414,14 @@
   [hidden]{display:none!important}
 
   /* 공유 */
-  .footer{padding:56px 28px 60px;text-align:center;border-top:1px solid var(--line);background:var(--box-head)}
+  .footer{padding:64px 28px 60px;text-align:center;background:linear-gradient(to bottom,rgba(237,241,231,0),var(--box-head) 60px)}
   .footer .thanks{font-family:var(--serif-en);font-style:italic;font-weight:600;font-size:40px;line-height:1.2;color:var(--accent-text)}
   .footer .foot-names{margin-top:14px;font-size:19px;font-weight:700;color:var(--ink)}
   .footer .foot-names span{font-family:var(--serif-en);font-style:italic;color:var(--accent-text);margin:0 4px}
   .footer .foot-date{color:var(--muted);letter-spacing:.2em;margin-top:2px}
-  .share{display:flex;flex-direction:column;gap:10px;margin-top:30px}
+  .share{display:flex;flex-direction:column;gap:8px;margin:30px auto 0;max-width:280px}
+  .share .btn{min-height:44px;font-size:16px}
+  #linkCopy{background:var(--accent-strong);border-color:var(--accent-strong);color:#fff}
   .btn.kakao{background:#FEE500;border-color:#FEE500;color:#191919;font-weight:700}   /* 카카오 공식 노란색: 어르신도 한눈에 */
   .btn.kakao svg{width:20px;height:20px;fill:#191919}
 
@@ -611,13 +664,34 @@
       </div>
       <div>
         <h3>교통편 안내</h3>
-        <div class="tr"><h4>지하철</h4><p><span class="todo">[입력 필요]</span></p></div>
-        <div class="tr"><h4>버스</h4><p><span class="todo">[입력 필요]</span></p></div>
+        <div class="tr"><h4>지하철</h4>
+          <div class="tr-card">
+            <div class="tr-main"><span class="ln ln-sl">신림선</span>
+              <div><b>보라매병원(전문건설회관)역 2번 출구</b><small>출구에서 83m · 도보 2분</small></div></div>
+            <ul class="tr-xfer">
+              <li><span class="ln ln-7 round">7</span><span>보라매역</span><span class="arw">→</span><span class="ln ln-sl">신림선</span><em>2정거장</em></li>
+              <li><span class="ln ln-2 round">2</span><span>신림역</span><span class="arw">→</span><span class="ln ln-sl">신림선</span><em>2정거장</em></li>
+              <li><span class="ln ln-1 round">1</span><span>대방역</span><span class="arw">→</span><span class="ln ln-sl">신림선</span><em>4정거장</em></li>
+            </ul>
+          </div>
+        </div>
+        <div class="tr"><h4>버스</h4>
+          <div class="tr-card">
+            <p class="tr-stop">전문건설회관.보라매병원 <small>예식장 건물 앞</small></p>
+            <div class="bus-row"><span class="bus-type bt-m">마을</span><span class="bus-num bn-m">동작05-1</span></div>
+          </div>
+          <div class="tr-card">
+            <p class="tr-stop">서울특별시보라매병원 <small>정류장 일대</small></p>
+            <div class="bus-row"><span class="bus-type bt-g">간선</span><span class="bus-num bn-g">153</span></div>
+            <div class="bus-row"><span class="bus-type bt-j">지선</span><span class="bus-num bn-j">5516</span><span class="bus-num bn-j">5525</span></div>
+            <div class="bus-row"><span class="bus-type bt-m">마을</span><span class="bus-num bn-m">동작05</span><span class="bus-num bn-m">동작05-1</span></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ⑧ 마음 전하실 곳 : 은행·계좌번호를 채우고 data-copy 값도 같이 바꿀 것 -->
+  <!-- ⑧ 마음 전하실 곳 : 내용은 스크립트 CONFIG.contacts 에서 자동 생성 (전화번호·은행·계좌번호를 거기에 입력) -->
   <section>
     <span class="eng">Account</span>
     <h2>마음 전하실 곳</h2>
@@ -625,25 +699,11 @@
       <p>저희의 새로운 시작을 축복해 주시는<br>마음만으로도 충분히 감사드립니다.</p>
       <p>혹여 마음을 전하고 싶으신 분들을 위해<br>계좌 정보를 함께 기재합니다.</p>
     </div>
-    <details class="acc">
-      <summary>신랑측 계좌번호</summary>
-      <div class="body">
-        <div class="line"><div>신랑 박덕재<br><span class="todo">[입력 필요] 은행 · 계좌</span></div><button class="btn" type="button" data-copy="">복사</button></div>
-        <div class="line"><div>아버지 박효성<br><span class="todo">[입력 필요] 은행 · 계좌</span></div><button class="btn" type="button" data-copy="">복사</button></div>
-        <div class="line"><div>어머니 장성희<br><span class="todo">[입력 필요] 은행 · 계좌</span></div><button class="btn" type="button" data-copy="">복사</button></div>
-      </div>
-    </details>
-    <details class="acc">
-      <summary>신부측 계좌번호</summary>
-      <div class="body">
-        <div class="line"><div>신부 조예진<br><span class="todo">[입력 필요] 은행 · 계좌</span></div><button class="btn" type="button" data-copy="">복사</button></div>
-        <div class="line"><div>아버지 조규출<br><span class="todo">[입력 필요] 은행 · 계좌</span></div><button class="btn" type="button" data-copy="">복사</button></div>
-        <div class="line"><div>어머니 김재희<br><span class="todo">[입력 필요] 은행 · 계좌</span></div><button class="btn" type="button" data-copy="">복사</button></div>
-      </div>
-    </details>
+    <details class="acc"><summary>신랑측</summary><div class="body" id="accGroom"></div></details>
+    <details class="acc"><summary>신부측</summary><div class="body" id="accBride"></div></details>
   </section>
 
-  <!-- ⑨ RSVP : 참석 의사. CONFIG.rsvpSheetUrl 있으면 구글 시트(rsvp_sheet.gs), 없으면 Supabase rsvp 테이블(rsvp.sql). 하객은 보내기만 -->
+  <!-- ⑨ RSVP : 참석 의사 → 구글 시트(rsvp_sheet.gs). 하객은 보내기만 -->
   <section>
     <span class="eng">RSVP</span>
     <h2>참석 의사 전달</h2>
@@ -667,13 +727,13 @@
         <input id="rsvpName" maxlength="20" autocomplete="name" placeholder="성함을 입력해 주세요" required>
       </div>
       <div class="rsvp-row" data-if-attend>
-        <span class="rsvp-label">참석 인원</span>
-        <div class="stepper">
-          <button type="button" id="rsvpMinus" aria-label="인원 줄이기">−</button>
-          <output id="rsvpCount">1</output><span>명</span>
-          <button type="button" id="rsvpPlus" aria-label="인원 늘리기">+</button>
+        <span class="rsvp-label">참석 인원(본인 포함)</span>
+        <div>
+          <div class="count-row"><span class="cr-label">성인</span>
+            <div class="stepper"><button type="button" data-step="adult" data-d="-1" aria-label="성인 줄이기">−</button><output id="rsvpAdult">1</output><button type="button" data-step="adult" data-d="1" aria-label="성인 늘리기">+</button></div></div>
+          <div class="count-row"><span class="cr-label">소인(5세 ~ 12세)</span>
+            <div class="stepper"><button type="button" data-step="kid" data-d="-1" aria-label="소인 줄이기">−</button><output id="rsvpKid">0</output><button type="button" data-step="kid" data-d="1" aria-label="소인 늘리기">+</button></div></div>
         </div>
-        <p class="rsvp-help">본인 포함</p>
       </div>
       <button class="btn fill rsvp-submit" type="button" id="rsvpSubmit">참석 의사 보내기</button>
     </form>
@@ -683,7 +743,7 @@
     </div>
   </section>
 
-  <!-- ⑩ 방명록 : Supabase 실시간. 설정은 CONFIG.supabaseUrl / supabaseKey, 테이블은 guestbook.sql -->
+  <!-- ⑩ 방명록 : 구글 시트 '방명록' 탭에 저장(RSVP와 같은 Apps Script 주소). 남기기 아래에 전체 방명록 -->
   <section>
     <span class="eng">Guestbook</span>
     <h2>방명록</h2>
@@ -734,8 +794,6 @@
 
 <!-- 카카오 SDK: KAKAO_JS_KEY를 넣으면 카톡 공유 카드가 동작 -->
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
-<!-- Supabase SDK (방명록) -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ===================== 설정값 (여기만 고치면 됨) ===================== */
 const CONFIG = {
@@ -743,14 +801,27 @@ const CONFIG = {
   galleryPlaceholderCount: 9,     // 사진이 없을 때 보여줄 빈 칸 수
   weddingDate: new Date(2027, 5, 5, 11, 30), // 월은 0부터 (5 = 6월)
   // 서울 6월 평년값(1991–2020, 기상청 / Wikipedia 'Climate of Seoul' 표)
-  juneClimate: {max: 27.6, mean: 22.7, min: 18.7, rainMm: 129.5, rainDays: 7.6, humidity: 65.7},
+  juneClimate: {max: 27.6, mean: 22.7, min: 18.7},   // 기상청 1991~2020 서울 6월 평년값
   kakaoKey: 'c19c8dd57182e08b3ea6869f57b5c6f7',   // 카카오 JavaScript 키 (공유·카카오내비). 도메인 등록: 플랫폼 키>JavaScript SDK 도메인 + 제품 링크 관리>웹 도메인 = https://heyjinyocho.github.io
-  supabaseUrl: '',                // [입력 필요] 방명록: Supabase Project URL (https://xxxx.supabase.co)
-  supabaseKey: '',                // [입력 필요] 방명록: anon(public) 또는 publishable 키 — service_role/secret 키는 절대 넣지 말 것
+  // 마음 전하실 곳: phone 은 숫자만 또는 010-0000-0000, account 는 하이픈 있어도 됨(복사 시 숫자만)
+  contacts: {
+    groom: [
+      {role: '신랑',   name: '박덕재', phone: '', bank: '', account: '', holder: ''},
+      {role: '아버지', name: '박효성', phone: '', bank: '', account: '', holder: ''},
+      {role: '어머니', name: '장성희', phone: '', bank: '', account: '', holder: ''},
+    ],
+    bride: [
+      {role: '신부',   name: '조예진', phone: '', bank: '', account: '', holder: ''},
+      {role: '아버지', name: '조규출', phone: '', bank: '', account: '', holder: ''},
+      {role: '어머니', name: '김재희', phone: '', bank: '', account: '', holder: ''},
+    ],
+  },
   rsvpSheetUrl: 'https://script.google.com/macros/s/AKfycbzFXT-MwTY0q3LeNTkDaw-ZShKi1t4tUQJlJUfhYpKuP-qoP3EQPQhm3Hd1sC3Lmhv-hg/exec',   // RSVP → 구글 시트 (rsvp_sheet.gs 웹 앱)
   venue: {
     name: '플로렌스 보라매 카라홀',
     address: '서울 동작구 보라매로5길 15',
+    placeName: '플로렌스파티하우스 보라매점',   // 카카오맵·네이버지도에 등록된 이름
+    kakaoPlaceId: '86427304',                 // place.map.kakao.com/86427304
     lat: 37.4925, lng: 126.9246,  // 보라매병원역(37.49296,126.92427) 바로 남동쪽 — 날씨·티맵·카카오내비용 근삿값
   },
   // 주차장: 곳 수만큼 항목 추가. query = 네이버지도에서 검색할 이름이나 주소
@@ -888,8 +959,8 @@ async function copy(text){
   }
 
   // 네이버지도 / 카카오맵: 웹 주소 → 앱이 깔려 있으면 앱으로 연결됨
-  $('#navNaver').onclick=()=>window.open('https://map.naver.com/p/search/'+enc(V.address),'_blank');
-  $('#navKakaoMap').onclick=()=>window.open('https://map.kakao.com/link/search/'+enc(V.address),'_blank');
+  $('#navNaver').onclick=()=>window.open('https://map.naver.com/p/search/'+enc(V.placeName),'_blank');
+  $('#navKakaoMap').onclick=()=>window.open('https://place.map.kakao.com/'+V.kakaoPlaceId,'_blank');   // 카카오맵에 등록된 예식장 장소 페이지
 
   // 티맵: 좌표가 있으면 바로 길안내, 없으면 장소 검색
   $('#navTmap').onclick=()=>{
@@ -921,16 +992,16 @@ async function copy(text){
     :c===45||c===48?['🌫️','안개']:c>=51&&c<=57?['🌦️','이슬비']:(c>=61&&c<=67)||(c>=80&&c<=82)?['🌧️','비']
     :(c>=71&&c<=77)||c===85||c===86?['🌨️','눈']:c>=95?['⛈️','뇌우']:['🌤️','-'];
   const climate=(note)=>{
-    box.innerHTML='<div class="w-head">예식일 날씨 <span>서울 6월 평년값</span></div>'+
-      '<div class="w-body"><div class="w-icon">🌿</div><div class="w-main"><b>낮 '+C.max+'° · 아침 '+C.min+'°</b>6월 평균 기온 '+C.mean+'°</div></div>'+
-      '<div class="w-grid"><div><small>월 강수량</small>'+C.rainMm+'mm</div><div><small>비 오는 날</small>약 '+Math.round(C.rainDays)+'일</div><div><small>평균 습도</small>'+Math.round(C.humidity)+'%</div></div>'+
-      '<p class="w-note">'+note+'</p>';
+    // 평년값: 6월 서울은 강수일이 한 달 중 약 8일뿐이라 '해+구름' 아이콘
+    box.innerHTML='<div class="w-head">예식일 날씨</div>'+
+      '<div class="w-body"><div class="w-icon">🌤️</div><div class="w-main"><b>낮 '+C.max+'° · 아침 '+C.min+'°</b>6월 평균 기온 '+C.mean+'°</div></div>'+
+      (note?'<p class="w-note">'+note+'</p>':'');
   };
   if(dleft<0||dleft>15){
-    climate(dleft>15?'예식 15일 전(D-15)부터 실제 일기예보로 바뀌어요. · 기상청 1991–2020 평년값':'기상청 1991–2020 평년값');
+    climate('');
     return;
   }
-  box.innerHTML='<div class="w-head">예식일 날씨 <span>예보 불러오는 중…</span></div>';
+  box.innerHTML='<div class="w-head">예식일 날씨</div><p class="w-note" style="padding-top:14px">예보를 불러오는 중…</p>';
   const url='https://api.open-meteo.com/v1/forecast?latitude='+V.lat+'&longitude='+V.lng+
     '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max'+
     '&hourly=temperature_2m,weather_code&timezone=Asia%2FSeoul&start_date='+ymd(wd)+'&end_date='+ymd(wd);
@@ -940,11 +1011,31 @@ async function copy(text){
     const hIdx=j.hourly.time.indexOf(ymd(wd)+'T'+pad(W.getHours())+':00');
     const atT=hIdx>=0?Math.round(j.hourly.temperature_2m[hIdx]):null;
     const [ic,tx]=sky(hIdx>=0?j.hourly.weather_code[hIdx]:d.weather_code[0]);
-    box.innerHTML='<div class="w-head">예식일 날씨 <span>'+(dleft===0?'오늘':'D-'+dleft)+' · 실제 예보</span></div>'+
+    box.innerHTML='<div class="w-head">예식일 날씨</div>'+
       '<div class="w-body"><div class="w-icon">'+ic+'</div><div class="w-main"><b>'+tx+(atT!==null?' · 예식 시간 '+atT+'°':'')+'</b>최고 '+hi+'° / 최저 '+lo+'°</div></div>'+
       '<div class="w-grid"><div><small>강수 확률</small>'+(pop==null?'-':pop+'%')+'</div><div><small>최고</small>'+hi+'°</div><div><small>최저</small>'+lo+'°</div></div>'+
-      '<p class="w-note">예보는 바뀔 수 있어요. · 날씨 데이터: Open-Meteo</p>';
-  }).catch(()=>climate('지금은 예보를 불러오지 못해 평년값을 보여드려요. · 기상청 1991–2020 평년값'));
+      '<p class="w-note">날씨 데이터: Open-Meteo</p>';   // 데이터 출처 표기(이용 조건)
+  }).catch(()=>climate(''));
+})();
+
+/* 마음 전하실 곳: 인물 카드 생성 */
+(function(){
+  const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const icTel='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5h3.2l1.6 4.2-2.2 1.5a11 11 0 0 0 7.2 7.2l1.5-2.2 4.2 1.6V19a1.8 1.8 0 0 1-1.9 1.8A16.5 16.5 0 0 1 3.2 5.4 1.8 1.8 0 0 1 5 3.5z"/></svg>';
+  const icSms='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m3.8 7 8.2 6 8.2-6"/></svg>';
+  const card=p=>{
+    const tel=String(p.phone||'').replace(/[^0-9+]/g,''),num=String(p.account||'').replace(/\D/g,'');
+    const a=(href,ic,lb)=>tel?'<a class="ic-btn" href="'+href+tel+'" aria-label="'+esc(p.name)+' '+lb+'">'+ic+'</a>'
+      :'<button class="ic-btn" type="button" data-empty="연락처" aria-label="'+esc(p.name)+' '+lb+'">'+ic+'</button>';
+    const acct=num?'<div class="num">'+esc(p.bank)+' '+esc(p.account)+(p.holder?'<span>예금주 '+esc(p.holder)+'</span>':'')+'</div>'
+      :'<div class="num"><span class="todo">[입력 필요] 은행 · 계좌</span></div>';
+    return '<div class="pc-row"><div class="pc-top"><div class="pc-who"><small>'+esc(p.role)+'</small><b>'+esc(p.name)+'</b></div>'+
+      '<div class="pc-icons">'+a('tel:',icTel,'전화하기')+a('sms:',icSms,'문자 보내기')+'</div></div>'+
+      '<div class="pc-acct">'+acct+'<button class="btn" type="button" data-copy="'+num+'" data-copy-label="계좌번호">복사</button></div></div>';
+  };
+  const C=CONFIG.contacts||{};
+  [['#accGroom',C.groom],['#accBride',C.bride]].forEach(([id,list])=>{const el=$(id);if(el&&list)el.innerHTML=list.map(card).join('');});
+  document.querySelectorAll('[data-empty]').forEach(b=>b.addEventListener('click',()=>toast('연락처가 아직 입력되지 않았습니다')));
 })();
 
 /* 복사 버튼 (주소·계좌) */
@@ -952,15 +1043,15 @@ document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',(
   const v=b.dataset.copy; if(!v){toast('계좌번호가 아직 입력되지 않았습니다');return;} copy(v);
 }));
 
-/* RSVP (구글 시트 또는 Supabase · 보내기만) */
+/* RSVP (구글 시트 · 보내기만) */
 (function(){
   const f=$('#rsvpForm');if(!f)return;
-  const done=$('#rsvpDone'),btn=$('#rsvpSubmit');let count=1;
+  const done=$('#rsvpDone'),btn=$('#rsvpSubmit');const n={adult:1,kid:0};
   const attendRows=[...f.querySelectorAll('[data-if-attend]')];
   const sync=()=>{const a=f.attend.value;attendRows.forEach(r=>r.hidden=(a==='no'));};
   f.addEventListener('change',sync);sync();
-  const setCount=n=>{count=Math.max(1,Math.min(10,n));$('#rsvpCount').textContent=count;};
-  $('#rsvpMinus').onclick=()=>setCount(count-1);$('#rsvpPlus').onclick=()=>setCount(count+1);
+  const setCount=(k,v)=>{n[k]=Math.max(k==='adult'?1:0,Math.min(10,v));$(k==='adult'?'#rsvpAdult':'#rsvpKid').textContent=n[k];};
+  f.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>setCount(b.dataset.step,n[b.dataset.step]+ +b.dataset.d));
   $('#rsvpAgain').onclick=()=>{done.hidden=true;f.hidden=false;};
   const send=async e=>{
     if(e)e.preventDefault();
@@ -969,85 +1060,64 @@ document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',(
     if(!side){toast('신랑측 / 신부측을 선택해 주세요');return;}
     if(!attend){toast('참석 여부를 선택해 주세요');return;}
     if(!name){toast('성함을 입력해 주세요');$('#rsvpName').focus();return;}
-    const row={name,side,attending:attend==='yes',headcount:attend==='yes'?count:0};
+    const yes=attend==='yes';
+    const row={name,side,attending:yes,headcount:yes?n.adult:0,kids:yes?n.kid:0};
     let ok=false;btn.disabled=true;const label=btn.textContent;btn.textContent='보내는 중…';
     try{
       if(CONFIG.rsvpSheetUrl){                                   // ① 구글 시트 (Apps Script 웹 앱)
         const res=await fetch(CONFIG.rsvpSheetUrl,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(row)});
         ok=res.ok&&(await res.json()).ok===true;
-      }else if(window.supabase&&CONFIG.supabaseUrl&&CONFIG.supabaseKey){   // ② Supabase (rsvp.sql)
-        const db=window.__sb||(window.__sb=window.supabase.createClient(CONFIG.supabaseUrl,CONFIG.supabaseKey));
-        ok=!(await db.from('rsvp').insert(row)).error;
       }else{btn.disabled=false;btn.textContent=label;toast('참석 의사 전달이 아직 연결되지 않았습니다');return;}
     }catch(err){ok=false}
     btn.disabled=false;btn.textContent=label;
     const error=!ok;
     if(error){toast('전달에 실패했습니다. 잠시 후 다시 시도해주세요');return;}
-    $('#rsvpDoneName').textContent=name;f.reset();setCount(1);sync();f.hidden=true;done.hidden=false;
+    $('#rsvpDoneName').textContent=name;f.reset();setCount('adult',1);setCount('kid',0);sync();f.hidden=true;done.hidden=false;
   };
   btn.addEventListener('click',send);          // 미리보기 창처럼 '제출'이 막힌 곳에서도 동작
   f.addEventListener('submit',send);          // 키보드 Enter
 })();
 
-/* 방명록 (Supabase · 실시간) */
+/* 방명록 (구글 시트 · 남기기 + 전체 보기) */
 (function(){
-  const PAGE=20;
+  const PAGE=20,API=CONFIG.rsvpSheetUrl;
   const list=$('#gbList'),form=$('#gbForm'),btn=$('#gbSubmit'),more=$('#gbMore');
   const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const fmt=iso=>{const d=new Date(iso),z=n=>String(n).padStart(2,'0');return d.getFullYear()+'.'+z(d.getMonth()+1)+'.'+z(d.getDate());};
-  const card=r=>'<div class="gb-card" data-id="'+r.id+'"><div class="who"><b>'+esc(r.name)+'</b><span>'+fmt(r.created_at)+'</span></div><p>'+esc(r.message)+'</p></div>';
-  const seen=new Set();let oldest=null;
-
+  const fmt=iso=>{const d=new Date(iso),z=n=>String(n).padStart(2,'0');return isNaN(d)?'':d.getFullYear()+'.'+z(d.getMonth()+1)+'.'+z(d.getDate());};
+  const card=r=>'<div class="gb-card"><div class="who"><b>'+esc(r.name)+'</b><span>'+fmt(r.t)+'</span></div><p>'+esc(r.message)+'</p></div>';
+  let items=[],shown=0;
   $('#gbMsg').addEventListener('input',e=>{$('#gbCount').textContent=e.target.value.length;});
-
-  const empty=()=>{if(!seen.size)list.innerHTML='<p class="gb-empty">첫 축하 메시지를 남겨주세요.</p>';};
-  const add=(rows,where)=>{
-    const fresh=rows.filter(r=>!seen.has(r.id));if(!fresh.length)return;
-    if(!seen.size)list.innerHTML='';
-    fresh.forEach(r=>seen.add(r.id));
-    list.insertAdjacentHTML(where,fresh.map(card).join(''));
+  const render=()=>{
+    if(!items.length){list.innerHTML='<p class="gb-empty">첫 축하 메시지를 남겨주세요.</p>';more.hidden=true;return;}
+    list.innerHTML=items.slice(0,shown).map(card).join('');
+    more.hidden=shown>=items.length;
   };
-
-  if(!(window.supabase&&CONFIG.supabaseUrl&&CONFIG.supabaseKey)){
-    list.innerHTML='<p class="gb-empty"><span class="todo">[입력 필요] Supabase 연결 정보</span></p>';
-    const nc=e=>{if(e)e.preventDefault();toast('방명록이 아직 연결되지 않았습니다');};
-    btn.addEventListener('click',nc);form.addEventListener('submit',nc);
-    return;
-  }
-  const db=window.__sb||(window.__sb=window.supabase.createClient(CONFIG.supabaseUrl,CONFIG.supabaseKey));
-
-  // 처음 20개, 이후 '더 보기'로 20개씩 (최신순)
+  more.onclick=()=>{shown=Math.min(items.length,shown+PAGE);render();};
   async function load(){
-    let q=db.from('guestbook').select('id,name,message,created_at').order('created_at',{ascending:false}).limit(PAGE);
-    if(oldest)q=q.lt('created_at',oldest);
-    const {data,error}=await q;
-    if(error){if(!seen.size)list.innerHTML='<p class="gb-empty">방명록을 불러오지 못했습니다.</p>';return;}
-    add(data,'beforeend');
-    if(data.length)oldest=data[data.length-1].created_at;
-    more.hidden=data.length<PAGE;
-    empty();
+    if(!API){list.innerHTML='<p class="gb-empty">방명록이 아직 연결되지 않았습니다.</p>';return;}
+    try{
+      const j=await fetch(API+'?action=guestbook',{cache:'no-store'}).then(r=>r.json());
+      if(!j.ok||!Array.isArray(j.items))throw 0;
+      items=j.items;shown=Math.min(items.length,Math.max(shown,PAGE));render();
+    }catch(e){if(!items.length)list.innerHTML='<p class="gb-empty">방명록을 불러오지 못했습니다.</p>';}
   }
-  more.onclick=load;
   load();
-
-  // 실시간: 다른 하객이 남긴 글이 새로고침 없이 맨 위에 카드로 쌓임
-  db.channel('guestbook-live')
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'guestbook'},p=>add([p.new],'afterbegin'))
-    .subscribe();
-
   const post=async e=>{
     if(e)e.preventDefault();
     if(btn.disabled)return;
     const name=$('#gbName').value.trim(),message=$('#gbMsg').value.trim();
     if(!name){toast('이름을 입력해 주세요');return;}
     if(!message){toast('축하 메시지를 입력해 주세요');return;}
-    btn.disabled=true;
-    const {data,error}=await db.from('guestbook').insert({name,message}).select('id,name,message,created_at').single();
-    btn.disabled=false;
-    if(error){toast('등록에 실패했습니다. 잠시 후 다시 시도해주세요');return;}
-    add([data],'afterbegin');   // 실시간 알림과 중복되지 않게 id로 걸러냄
+    if(!API){toast('방명록이 아직 연결되지 않았습니다');return;}
+    btn.disabled=true;const label=btn.textContent;btn.textContent='남기는 중…';
+    let ok=false;
+    try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({kind:'guestbook',name,message})});ok=r.ok&&(await r.json()).ok===true;}catch(err){}
+    btn.disabled=false;btn.textContent=label;
+    if(!ok){toast('등록에 실패했습니다. 잠시 후 다시 시도해주세요');return;}
+    items.unshift({t:new Date().toISOString(),name,message});shown=Math.max(shown,Math.min(items.length,PAGE));render();   // 바로 보이게
     form.reset();$('#gbCount').textContent='0';
     toast('축하 메시지가 등록되었습니다');
+    load();   // 시트 기준으로 다시 맞춤
   };
   btn.addEventListener('click',post);   // '제출'이 막힌 미리보기 창에서도 동작
   form.addEventListener('submit',post);
