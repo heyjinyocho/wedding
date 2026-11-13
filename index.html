@@ -1056,21 +1056,31 @@ document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',(
 /* 공유 */
 const shareUrl=()=>CONFIG.shareUrl||location.href;
 $('#linkCopy').onclick=()=>copy(shareUrl());
-$('#kakaoShare').onclick=()=>{
+// 카카오 SDK가 늦게/안 불러와졌으면 버튼 누를 때 한 번 더 불러옴
+const loadKakao=()=>window.Kakao?Promise.resolve(window.Kakao):new Promise((ok,no)=>{
+  const sc=document.createElement('script');sc.src='https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js';sc.crossOrigin='anonymous';
+  sc.onload=()=>window.Kakao?ok(window.Kakao):no();sc.onerror=no;document.head.appendChild(sc);
+});
+$('#kakaoShare').onclick=async()=>{
   const url=shareUrl(),link={mobileWebUrl:url,webUrl:url};
-  if(window.Kakao&&CONFIG.kakaoKey){
-    if(!Kakao.isInitialized())Kakao.init(CONFIG.kakaoKey);
-    const buttons=[{title:'청첩장 보기',link}];   // 게스트스냅은 별도 QR로 안내 (사용자 결정)
+  if(!CONFIG.kakaoKey){                         // 키가 없을 때만 기기 공유창
+    if(navigator.share){navigator.share({title:'박덕재 ♥ 조예진 결혼합니다',url}).catch(()=>{});}
+    else{copy(url);toast('링크를 복사했어요');}
+    return;
+  }
+  try{
+    const K=await loadKakao();
+    if(!K.isInitialized())K.init(CONFIG.kakaoKey);
     const img=CONFIG.shareImage||new URL('images/share.jpg',url).href;   // 카카오는 https 절대주소만 받음
-    Kakao.Share.sendDefault({                 // 리치카드: 세로 사진 + 제목 + '청첩장 보기' 버튼
+    K.Share.sendDefault({                       // 카카오톡 앱의 공유 화면 → 세로 사진 + 제목 + '청첩장 보기' 버튼 카드
       objectType:'feed',
       content:{title:'박덕재 ♥ 조예진 결혼합니다',description:'2027년 6월 5일 토요일 오전 11시 30분\n플로렌스 보라매 카라홀',
         imageUrl:img,imageWidth:800,imageHeight:1067,link},
-      buttons
+      buttons:[{title:'청첩장 보기',link}]       // 게스트스냅은 별도 QR로 안내 (사용자 결정)
     });
-  }else if(navigator.share){
-    navigator.share({title:'박덕재 ♥ 조예진 결혼합니다',url}).catch(()=>{});
-  }else{copy(url);toast('카카오톡 공유 설정 전이라 링크를 복사했어요');}
+  }catch(e){
+    await copy(url);toast('카카오톡 공유를 불러오지 못해 링크를 복사했어요. 카카오톡에 붙여넣어 주세요');
+  }
 };
 </script>
 </body>
