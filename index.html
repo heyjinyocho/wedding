@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="theme-color" content="#F7F5ED">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>박덕재 ♥ 조예진 결혼합니다</title>
 <meta name="description" content="2027년 6월 5일 토요일 오전 11시 30분 · 플로렌스 보라매 카라홀">
 <!-- 카톡/문자 링크 미리보기용. 이미지와 URL은 배포 후 채워야 함 -->
@@ -20,6 +20,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Gowun+Batang:wght@400;700&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
 <style>
+  /* 확대 막기: 두 손가락 확대·두 번 탭 확대 차단 (iOS는 아래 스크립트로 한 번 더) */
+  html{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%}
+  /* 사진 저장 막기: 길게 눌러 저장·끌어서 저장·선택 차단 (화면 캡처 자체는 웹에서 막을 수 없음) */
+  img,svg image{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-user-drag:none;user-drag:none}
+  .gallery,.lightbox,.hero-photo,.couple-photo{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
   html,body{overscroll-behavior-y:none}   /* 맨 위에서 아래로 끌어당겨도 화면이 늘어나지 않게 */
   :root{
     /* 컬러 테마: 아이보리 #F7F5ED + 세이지그린 #899B76, 글씨는 블랙 계열 */
@@ -785,7 +790,9 @@
 const CONFIG = {
   // 저장소 images/gallery/ 의 사진 (긴 변 1800px로 줄인 웹용). 순서 = 화면 순서, 첫 장은 크게
   gallery: ['images/gallery/01.jpg','images/gallery/02.jpg','images/gallery/03.jpg','images/gallery/04.jpg',
-            'images/gallery/05.jpg','images/gallery/06.jpg','images/gallery/07.jpg'],
+            'images/gallery/05.jpg','images/gallery/06.jpg','images/gallery/07.jpg','images/gallery/08.jpg',
+            'images/gallery/09.jpg','images/gallery/10.jpg','images/gallery/11.jpg','images/gallery/12.jpg',
+            'images/gallery/13.jpg','images/gallery/14.jpg','images/gallery/15.jpg'],
   galleryPlaceholderCount: 9,     // 사진이 없을 때 보여줄 빈 칸 수
   weddingDate: new Date(2027, 5, 5, 11, 30), // 월은 0부터 (5 = 6월)
   // 서울 6월 평년값(1991–2020, 기상청 / Wikipedia 'Climate of Seoul' 표)
@@ -887,6 +894,21 @@ async function copy(text){
   window.addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(update);}},{passive:true});
   window.addEventListener('resize',()=>{if(!done)update();});
   update();
+})();
+
+/* 확대·사진 저장 막기 */
+(function(){
+  // iOS 사파리는 user-scalable=no 를 무시하므로 제스처를 직접 막음
+  ['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
+  document.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault();},{passive:false});
+  // 두 번 탭 확대는 CSS touch-action 으로 막힘 (스크립트로 막으면 +버튼 빠르게 두 번 누르기가 씹힘)
+  // 사진: 길게 누르기 메뉴·오른쪽 클릭·끌기 차단
+  const isPic=t=>t&&(t.tagName==='IMG'||t.closest&&t.closest('.gallery,.lightbox,.hero-photo,picture'));
+  document.addEventListener('contextmenu',e=>{if(isPic(e.target))e.preventDefault();});
+  document.addEventListener('dragstart',e=>{if(isPic(e.target))e.preventDefault();});
+  document.querySelectorAll('img').forEach(i=>i.setAttribute('draggable','false'));
+  new MutationObserver(m=>m.forEach(r=>r.addedNodes.forEach(n=>{if(n.querySelectorAll)n.querySelectorAll('img').forEach(i=>i.setAttribute('draggable','false'));})))
+    .observe(document.body,{childList:true,subtree:true});
 })();
 
 /* 갤러리 + 라이트박스 */
