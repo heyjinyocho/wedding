@@ -20,6 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Gowun+Batang:wght@400;700&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
 <style>
+  html,body{overscroll-behavior-y:none}   /* 맨 위에서 아래로 끌어당겨도 화면이 늘어나지 않게 */
   :root{
     /* 컬러 테마: 아이보리 #F7F5ED + 세이지그린 #899B76, 글씨는 블랙 계열 */
     --paper:#F7F5ED;        /* 페이지 배경: 아이보리 */
@@ -112,7 +113,7 @@
     text-shadow:0 2px 10px rgba(0,0,0,.35);
   }
   body.opening-lock .hero-info{opacity:0;transition:none}   /* 봉투를 막 연 순간엔 일시·장소 숨김 */
-  .hero-info{transition:opacity .5s ease .9s;
+  .hero-info{transition:opacity .45s ease .05s;
     position:absolute;left:0;right:0;bottom:6%;z-index:1;text-align:center;
     color:#fff;font-size:18px;font-weight:600;line-height:1.8;text-shadow:0 1px 6px rgba(0,0,0,.5);
   }
@@ -122,7 +123,7 @@
   body.opening-lock .env{opacity:0}   /* 오프닝 동안 숨겼다가 끝나면 서서히 */
   .env{transition:none}
   body.opening-lock .env-front .label{opacity:0}
-  .env-front .label{transition:opacity .6s ease .1s}
+  .env-front .label{transition:opacity .4s ease}
   .env{position:fixed;left:50%;bottom:0;width:100%;max-width:430px;pointer-events:none;
        transform:translate(-50%,0);will-change:transform}
   .env-behind{z-index:10;height:74vh}
@@ -169,7 +170,7 @@
   body.opening-lock{overflow:hidden}
   .opening{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;
     transition:opacity .55s ease .25s}
-  .opening::before{content:'';position:absolute;inset:0;z-index:-1;background-color:var(--paper);background-image:var(--grain-soft);transition:opacity .6s ease .15s}
+  .opening::before{content:'';position:absolute;inset:0;z-index:-1;background-color:var(--paper);background-image:var(--grain-soft);transition:opacity .4s ease .05s}
   .opening-head{text-align:center;margin-bottom:26px;color:var(--olive-d);transition:opacity .25s ease}
   .opening-head .names{font-family:var(--serif-en);font-weight:500;font-size:30px;letter-spacing:.08em;line-height:1.2;display:block}
   .opening-head .date{font-family:var(--serif-en);font-weight:600;font-size:17px;letter-spacing:.32em;display:block;margin-top:6px;color:var(--accent-text)}
@@ -189,16 +190,16 @@
   /* 봉투 속 사진 카드 (커버 사진을 그대로 복제해 넣음) */
   .o-card{position:absolute;left:2%;right:2%;top:2.5%;bottom:1.5%;   /* 봉투 안을 거의 꽉 채우는 카드 */
     z-index:1;overflow:hidden;border-radius:2px;background:#222;
-    box-shadow:0 1px 3px rgba(0,0,0,.25);transition:top .85s cubic-bezier(.3,.55,.25,1),transform .6s ease}
+    box-shadow:0 1px 3px rgba(0,0,0,.25);transition:top .55s cubic-bezier(.3,.55,.25,1),transform .4s ease}
   .o-card .hero-photo{position:absolute;inset:0}
   /* 닫힌 윗덮개(앞면, 올리브) + 실링 */
   .flap-front{position:absolute;left:0;right:0;top:0;height:54%;z-index:3;transform-origin:50% 0;
-    filter:drop-shadow(0 6px 7px rgba(15,18,8,.55));transition:transform .42s cubic-bezier(.55,0,1,.45) .12s,opacity .06s linear .5s}
+    filter:drop-shadow(0 6px 7px rgba(15,18,8,.55));transition:transform .3s cubic-bezier(.55,0,1,.45) .05s,opacity .05s linear .35s}
   .flap-front > i{position:absolute;inset:0;clip-path:polygon(0 0,100% 0,50% 100%);border-radius:3px 3px 0 0}
-  .flap-front .wax{left:50%;top:100%;width:86px;height:86px;transform:translate(-50%,-55%);transition:opacity .2s ease,transform .2s ease}
+  .flap-front .wax{left:50%;top:100%;width:86px;height:86px;transform:translate(-50%,-55%);transition:opacity .15s ease,transform .15s ease}
   /* 열린 윗덮개(안쪽 면: 올리브 테두리 + 아이보리 라이너) — 처음엔 납작하게 숨어 있음 */
   .flap-open{position:absolute;left:0;right:0;bottom:100%;height:54%;z-index:0;transform-origin:50% 100%;transform:rotateX(90deg);
-    filter:drop-shadow(0 -2px 4px rgba(15,18,8,.25));transition:transform .4s cubic-bezier(0,.55,.45,1) .54s}
+    filter:drop-shadow(0 -2px 4px rgba(15,18,8,.25));transition:transform .28s cubic-bezier(0,.55,.45,1) .36s}
   .flap-open > i,.flap-open > em{position:absolute;inset:0}
   .flap-open > i{clip-path:polygon(0 100%,50% 0,100% 100%)}
   .flap-open > em{clip-path:polygon(6% 100%,50% 9%,94% 100%)}
@@ -238,7 +239,9 @@
 
   /* 갤러리 */
   .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-  .gallery .item{aspect-ratio:1;overflow:hidden;border-radius:2px;cursor:pointer}
+  .gallery .item{aspect-ratio:2/3;overflow:hidden;border-radius:2px;cursor:pointer;background:#E9E5D8}
+  .gallery .item.wide{grid-column:1/-1;aspect-ratio:4/5}   /* 첫 장은 크게, 나머지는 3열 */
+  .gallery .ph{aspect-ratio:1}
   .gallery .item img{width:100%;height:100%;object-fit:cover;display:block}
   .gallery .ph{font-size:14px;cursor:default}
   .lightbox{position:fixed;inset:0;background:rgba(30,20,14,.92);display:none;align-items:center;justify-content:center;z-index:50}
@@ -305,7 +308,9 @@
   .tr + .tr{margin-top:22px}
   .tr h4{font-size:var(--fs);font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:10px}
   .tr h4::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent)}
-  .tr-card{background:var(--box-bg);border:1px solid var(--box-line);border-radius:10px;padding:14px 16px}
+  .tr-acc{margin-top:10px}
+  .tr-acc .body{padding:12px}
+  .tr-card{background:#fff;border:1px solid var(--box-line);border-radius:10px;padding:14px 16px}
   .tr-card + .tr-card{margin-top:10px}
   .tr-main{display:flex;align-items:flex-start;gap:10px}
   .tr-main b{display:block;line-height:1.45}
@@ -346,20 +351,13 @@
   .acc[open] summary::after{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1.5 7h7L5 2.4z' fill='%2363744F'/%3E%3C/svg%3E") center/12px no-repeat,#fff}
   .acc .body{padding:4px 16px 8px;background:#FBFCF8}
   /* 인물 카드: 이름 + 전화/문자 / 계좌 + 복사 */
-  .pc-row{padding:16px 0}
-  .pc-row + .pc-row{border-top:1px dashed #D3DBC8}
-  .pc-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .pc-row{padding:10px 0}
   .pc-who small{color:var(--muted);font-size:15px;margin-right:6px}
   .pc-who b{font-weight:700;color:var(--ink)}
-  .pc-icons{display:flex;gap:8px;flex-shrink:0}
-  .ic-btn{width:40px;height:40px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
-    border:1.5px solid var(--accent-strong);color:var(--accent-strong);background:#fff;cursor:pointer;padding:0;text-decoration:none}
-  .ic-btn svg{width:18px;height:18px;display:block}
-  .ic-btn:active{background:var(--accent-strong);color:#fff}
-  .pc-acct{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;padding:10px 12px;background:#fff;border:1px solid var(--box-line);border-radius:8px}
-  .pc-acct .num{line-height:1.45;word-break:keep-all}
+  .pc-acct{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;padding:7px 8px 7px 12px;background:#fff;border:1px solid var(--box-line);border-radius:7px}
+  .pc-acct .num{line-height:1.4;word-break:keep-all;font-size:16px}
   .pc-acct .num span{display:block;color:var(--muted);font-size:15px}
-  .pc-acct .btn{min-height:38px;padding:0 14px;flex-shrink:0;background:var(--accent-strong);border-color:var(--accent-strong);color:#fff}
+  .pc-acct .btn{min-height:32px;padding:0 11px;font-size:15px;border-radius:6px;flex-shrink:0;background:var(--accent-strong);border-color:var(--accent-strong);color:#fff}
 
   /* RSVP */
   .rsvp{display:flex;flex-direction:column;gap:20px;text-align:left;background:var(--box-bg);border:1px solid var(--box-line);
@@ -652,7 +650,7 @@
       </div>
       <div>
         <h3>교통편 안내</h3>
-        <div class="tr"><h4>지하철</h4>
+        <details class="acc tr-acc"><summary>지하철</summary><div class="body">
           <div class="tr-card">
             <div class="tr-main"><span class="ln ln-sl">신림선</span>
               <div><b>보라매병원(전문건설회관)역 2번 출구</b><small>출구에서 83m · 도보 2분</small></div></div>
@@ -662,8 +660,8 @@
               <li><span class="ln ln-1 round">1</span><span>대방역</span><span class="arw">→</span><span class="ln ln-sl">신림선</span><em>4정거장</em></li>
             </ul>
           </div>
-        </div>
-        <div class="tr"><h4>버스</h4>
+        </div></details>
+        <details class="acc tr-acc"><summary>버스</summary><div class="body">
           <div class="tr-card">
             <p class="tr-stop">전문건설회관.보라매병원 <small>예식장 건물 앞</small></p>
             <div class="bus-row"><span class="bus-type bt-m">마을</span><span class="bus-num bn-m">동작05-1</span></div>
@@ -674,12 +672,12 @@
             <div class="bus-row"><span class="bus-type bt-j">지선</span><span class="bus-num bn-j">5516</span><span class="bus-num bn-j">5525</span></div>
             <div class="bus-row"><span class="bus-type bt-m">마을</span><span class="bus-num bn-m">동작05</span><span class="bus-num bn-m">동작05-1</span></div>
           </div>
-        </div>
+        </div></details>
       </div>
     </div>
   </section>
 
-  <!-- ⑧ 마음 전하실 곳 : 내용은 스크립트 CONFIG.contacts 에서 자동 생성 (전화번호·은행·계좌번호를 거기에 입력) -->
+  <!-- ⑧ 마음 전하실 곳 : 내용은 스크립트 CONFIG.contacts 에서 자동 생성 (은행·계좌번호를 거기에 입력) -->
   <section>
     <span class="eng">Account</span>
     <h2>마음 전하실 곳</h2>
@@ -785,23 +783,25 @@
 <script>
 /* ===================== 설정값 (여기만 고치면 됨) ===================== */
 const CONFIG = {
-  gallery: [],                    // [입력 필요] 예: ['img/01.jpg','img/02.jpg', ...]
+  // 저장소 images/gallery/ 의 사진 (긴 변 1800px로 줄인 웹용). 순서 = 화면 순서, 첫 장은 크게
+  gallery: ['images/gallery/01.jpg','images/gallery/02.jpg','images/gallery/03.jpg','images/gallery/04.jpg',
+            'images/gallery/05.jpg','images/gallery/06.jpg','images/gallery/07.jpg'],
   galleryPlaceholderCount: 9,     // 사진이 없을 때 보여줄 빈 칸 수
   weddingDate: new Date(2027, 5, 5, 11, 30), // 월은 0부터 (5 = 6월)
   // 서울 6월 평년값(1991–2020, 기상청 / Wikipedia 'Climate of Seoul' 표)
   juneClimate: {max: 27.6, mean: 22.7, min: 18.7},   // 기상청 1991~2020 서울 6월 평년값
   kakaoKey: 'c19c8dd57182e08b3ea6869f57b5c6f7',   // 카카오 JavaScript 키 (카카오톡 공유). 도메인 등록: 플랫폼 키>JavaScript SDK 도메인 + 제품 링크 관리>웹 도메인 = https://heyjinyocho.github.io
-  // 마음 전하실 곳: phone 은 숫자만 또는 010-0000-0000, account 는 하이픈 있어도 됨(복사 시 숫자만)
+  // 마음 전하실 곳: account 는 하이픈 있어도 됨(복사 시 숫자만), holder = 예금주(비워도 됨)
   contacts: {
     groom: [
-      {role: '신랑',   name: '박덕재', phone: '', bank: '', account: '', holder: ''},
-      {role: '아버지', name: '박효성', phone: '', bank: '', account: '', holder: ''},
-      {role: '어머니', name: '장성희', phone: '', bank: '', account: '', holder: ''},
+      {role: '신랑',   name: '박덕재', bank: '', account: '', holder: ''},
+      {role: '아버지', name: '박효성', bank: '', account: '', holder: ''},
+      {role: '어머니', name: '장성희', bank: '', account: '', holder: ''},
     ],
     bride: [
-      {role: '신부',   name: '조예진', phone: '', bank: '', account: '', holder: ''},
-      {role: '아버지', name: '조규출', phone: '', bank: '', account: '', holder: ''},
-      {role: '어머니', name: '김재희', phone: '', bank: '', account: '', holder: ''},
+      {role: '신부',   name: '조예진', bank: '', account: '', holder: ''},
+      {role: '아버지', name: '조규출', bank: '', account: '', holder: ''},
+      {role: '어머니', name: '김재희', bank: '', account: '', holder: ''},
     ],
   },
   rsvpSheetUrl: 'https://script.google.com/macros/s/AKfycbzFXT-MwTY0q3LeNTkDaw-ZShKi1t4tUQJlJUfhYpKuP-qoP3EQPQhm3Hd1sC3Lmhv-hg/exec',   // RSVP → 구글 시트 (rsvp_sheet.gs 웹 앱)
@@ -845,9 +845,9 @@ async function copy(text){
     if(started)return;started=true;
     if(reduce){ov.classList.add('s-leave');setTimeout(finish,800);return;}
     ov.classList.add('s-open');                               // 0.0s 실링 떼고 덮개 열기
-    setTimeout(()=>ov.classList.add('s-pull'),950);           // 0.95s 카드를 위로 길게 꺼내기
-    setTimeout(()=>{                                          // 1.9s 봉투 → 화면 아래 주머니, 카드 → 화면 가득
-      const ease='cubic-bezier(.45,0,.2,1)',D='.85s';
+    setTimeout(()=>ov.classList.add('s-pull'),620);           // 0.62s 카드를 위로 길게 꺼내기
+    setTimeout(()=>{                                          // 1.2s 봉투 → 화면 아래 주머니, 카드 → 화면 가득
+      const ease='cubic-bezier(.45,0,.2,1)',D='.55s';
       const r=card.getBoundingClientRect(),er=btn.getBoundingClientRect(),t=hero.getBoundingClientRect();
       const fix=(el,rc,tf,z)=>Object.assign(el.style,{position:'fixed',left:rc.left+'px',top:rc.top+'px',width:rc.width+'px',height:rc.height+'px',
         right:'auto',bottom:'auto',margin:'0',transform:tf,zIndex:z,transition:'none',aspectRatio:'auto'});
@@ -857,12 +857,12 @@ async function copy(text){
       card.getBoundingClientRect();
       const tr=['left','top','width','height','transform','border-radius','box-shadow'].map(x=>x+' '+D+' '+ease).join(',');
       card.style.transition=tr;
-      btn.style.transition=['left','top','width','height'].map(x=>x+' .62s cubic-bezier(.2,.7,.2,1)').join(',');   // 봉투가 먼저 바닥에 닿게 → 사진이 봉투 아래로 삐져나오지 않음
+      btn.style.transition=['left','top','width','height'].map(x=>x+' .4s cubic-bezier(.2,.7,.2,1)').join(',');   // 봉투가 먼저 바닥에 닿게 → 사진이 봉투 아래로 삐져나오지 않음
       const pw=Math.min(innerWidth,430),ph=Math.max(250,Math.min(380,innerHeight*.4));   // 커버 주머니(.env-front)와 같은 자리·크기
       Object.assign(card.style,{left:t.left+'px',top:t.top+'px',width:t.width+'px',height:t.height+'px',transform:'none',borderRadius:'0',boxShadow:'none'});
       Object.assign(btn.style,{left:(innerWidth-pw)/2+'px',top:(innerHeight-ph)+'px',width:pw+'px',height:ph+'px'});
-    },1900);
-    setTimeout(finish,2850);                                  // 진짜 커버(같은 모습)로 바꿔치기
+    },1200);
+    setTimeout(finish,1800);                                  // 진짜 커버(같은 모습)로 바꿔치기
   });
 })();
 
@@ -870,18 +870,22 @@ async function copy(text){
 (function(){
   const parts=[...document.querySelectorAll('.env')],back=document.querySelector('.env-behind');let ticking=false;
   const card=document.querySelector('.hero-card'),front=document.querySelector('.env-front');
+  let maxTy=0,done=false;
   const update=()=>{
-    const ty=Math.min(window.scrollY*1.6,window.innerHeight+40);   // 화면 밖으로 빠질 때까지만
+    if(done)return;
+    maxTy=Math.max(maxTy,Math.min(Math.max(0,window.scrollY)*2.4,window.innerHeight+40));   // 내려가기만 함: 다시 위로 올려도 봉투가 돌아오지 않음
+    const ty=maxTy;
     parts.forEach(el=>{el.style.transform='translate(-50%,'+ty+'px)';});
     // 봉투 안쪽(뒷판·덮개)은 카드 아래로 삐져나오지 않게 잘라냄 → 아래 섹션 글자를 가리지 않음
     const cb=card.getBoundingClientRect().bottom,bb=back.getBoundingClientRect().bottom;
     back.style.clipPath='inset(-30vh 0 '+Math.max(0,bb-cb)+'px 0)';
     const gone=front.getBoundingClientRect().top>=window.innerHeight;
     parts.forEach(el=>el.style.visibility=gone?'hidden':'visible');
+    if(gone){done=true;parts.forEach(el=>el.remove());}   // 한 번 사라지면 완전히 제거
     ticking=false;
   };
   window.addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(update);}},{passive:true});
-  window.addEventListener('resize',update);
+  window.addEventListener('resize',()=>{if(!done)update();});
   update();
 })();
 
@@ -892,7 +896,7 @@ async function copy(text){
     for(let i=0;i<CONFIG.galleryPlaceholderCount;i++){g.insertAdjacentHTML('beforeend','<div class="item ph">[입력 필요]</div>');}
     return;
   }
-  CONFIG.gallery.forEach((src,i)=>g.insertAdjacentHTML('beforeend','<div class="item" data-i="'+i+'"><img src="'+src+'" alt="웨딩 사진 '+(i+1)+'" loading="lazy"></div>'));
+  CONFIG.gallery.forEach((src,i)=>g.insertAdjacentHTML('beforeend','<div class="item'+(i===0&&CONFIG.gallery.length%3===1?' wide':'')+'" data-i="'+i+'"><img src="'+src+'" alt="웨딩 사진 '+(i+1)+'" loading="lazy" decoding="async"></div>'));
   const lb=$('#lightbox'),img=lb.querySelector('img');let cur=0;
   const show=i=>{cur=(i+CONFIG.gallery.length)%CONFIG.gallery.length;img.src=CONFIG.gallery[cur];lb.classList.add('on');};
   g.addEventListener('click',e=>{const it=e.target.closest('.item');if(it)show(+it.dataset.i);});
@@ -983,22 +987,37 @@ async function copy(text){
 /* 마음 전하실 곳: 인물 카드 생성 */
 (function(){
   const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const icTel='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5h3.2l1.6 4.2-2.2 1.5a11 11 0 0 0 7.2 7.2l1.5-2.2 4.2 1.6V19a1.8 1.8 0 0 1-1.9 1.8A16.5 16.5 0 0 1 3.2 5.4 1.8 1.8 0 0 1 5 3.5z"/></svg>';
-  const icSms='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m3.8 7 8.2 6 8.2-6"/></svg>';
   const card=p=>{
-    const tel=String(p.phone||'').replace(/[^0-9+]/g,''),num=String(p.account||'').replace(/\D/g,'');
-    const a=(href,ic,lb)=>tel?'<a class="ic-btn" href="'+href+tel+'" aria-label="'+esc(p.name)+' '+lb+'">'+ic+'</a>'
-      :'<button class="ic-btn" type="button" data-empty="연락처" aria-label="'+esc(p.name)+' '+lb+'">'+ic+'</button>';
+    const num=String(p.account||'').replace(/\D/g,'');
     const acct=num?'<div class="num">'+esc(p.bank)+' '+esc(p.account)+(p.holder?'<span>예금주 '+esc(p.holder)+'</span>':'')+'</div>'
       :'<div class="num"><span class="todo">[입력 필요] 은행 · 계좌</span></div>';
-    return '<div class="pc-row"><div class="pc-top"><div class="pc-who"><small>'+esc(p.role)+'</small><b>'+esc(p.name)+'</b></div>'+
-      '<div class="pc-icons">'+a('tel:',icTel,'전화하기')+a('sms:',icSms,'문자 보내기')+'</div></div>'+
+    return '<div class="pc-row"><div class="pc-who"><small>'+esc(p.role)+'</small><b>'+esc(p.name)+'</b></div>'+
       '<div class="pc-acct">'+acct+'<button class="btn" type="button" data-copy="'+num+'" data-copy-label="계좌번호">복사</button></div></div>';
   };
   const C=CONFIG.contacts||{};
   [['#accGroom',C.groom],['#accBride',C.bride]].forEach(([id,list])=>{const el=$(id);if(el&&list)el.innerHTML=list.map(card).join('');});
-  document.querySelectorAll('[data-empty]').forEach(b=>b.addEventListener('click',()=>toast('연락처가 아직 입력되지 않았습니다')));
 })();
+
+/* 축하 꽃가루: 참석 의사 전달 성공 시 (캔버스로 직접 그림, 1.8초) */
+function confetti(){
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const c=document.createElement('canvas'),x=c.getContext('2d'),dpr=Math.min(2,devicePixelRatio||1),W=innerWidth,H=innerHeight;
+  c.width=W*dpr;c.height=H*dpr;Object.assign(c.style,{position:'fixed',inset:'0',width:W+'px',height:H+'px',pointerEvents:'none',zIndex:200});
+  document.body.appendChild(c);x.scale(dpr,dpr);
+  const col=['#899B76','#63744F','#C9D3BA','#E8DDB5','#C8A95B','#F3EEDD','#E9B8B0'];
+  const P=[];
+  for(let i=0;i<140;i++){const left=i%2===0;   // 화면 양쪽 아래에서 위로 터져 오름
+    const a=(left?-60:-120)*Math.PI/180+(Math.random()-.5)*.9,v=9+Math.random()*9;
+    P.push({x:left?W*.08:W*.92,y:H*.82,vx:Math.cos(a)*v,vy:Math.sin(a)*v,w:5+Math.random()*5,h:8+Math.random()*7,r:Math.random()*6,vr:(Math.random()-.5)*.35,
+      c:col[i%col.length],shape:Math.random()<.25?1:0,t:Math.random()*6});}
+  const t0=performance.now(),D=2600;
+  (function f(now){const k=(now-t0)/D;x.clearRect(0,0,W,H);
+    for(const p of P){p.vx*=.985;p.vy=p.vy*.985+.32;p.x+=p.vx+Math.sin(p.t+=.08)*.6;p.y+=p.vy;p.r+=p.vr;
+      x.save();x.globalAlpha=Math.max(0,1-Math.max(0,k-.6)/.4);x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;
+      if(p.shape){x.beginPath();x.arc(0,0,p.w*.55,0,7);x.fill();}else{x.scale(1,Math.cos(p.t));x.fillRect(-p.w/2,-p.h/2,p.w,p.h);}
+      x.restore();}
+    if(k<1)requestAnimationFrame(f);else c.remove();})(t0);
+}
 
 /* 복사 버튼 (주소·계좌) */
 document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',()=>{
@@ -1034,6 +1053,7 @@ document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',(
     btn.disabled=false;btn.textContent=label;
     const error=!ok;
     if(error){toast('전달에 실패했습니다. 잠시 후 다시 시도해주세요');return;}
+    confetti();
     $('#rsvpDoneName').textContent=name;f.reset();setCount('adult',1);setCount('kid',0);sync();f.hidden=true;done.hidden=false;
   };
   btn.addEventListener('click',send);          // 미리보기 창처럼 '제출'이 막힌 곳에서도 동작
